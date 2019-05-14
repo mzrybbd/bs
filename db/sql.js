@@ -10,6 +10,7 @@ module.exports = {
   },
   stu: {
     add: 'insert into stu (sno,sname,cname,avatar,sex) values (?,?,?,?,?)',
+    search: 'select * from stu where cname in (select cname from class where tno=?)',
     delete: 'delete from stu where sno=?',
     check: 'select * from stu where sno=?',
     all: 'select * from stu',
@@ -26,7 +27,10 @@ module.exports = {
     all: 'select * from class',
     add: 'insert into class (tno, cname) values(?, ?)',
     update: 'update class set tno=?, cname=? where cname=?',
-    delete: 'delete from class where cname=?'
+    delete: 'delete from class where cname=?',
+    one: 'select * from class where tno=?'
   },
-
+  courseTable: {
+    add: 'insert into coursetable (tno, cname, cdate, stime, etime, address) values(?,?,?,?,?,?)'
+  }
 }

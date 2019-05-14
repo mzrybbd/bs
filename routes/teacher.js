@@ -2,6 +2,10 @@ var express = require('express');
 var router = express.Router();
 var db = require('../db/config');
 var sql = require("../db/sql");
+var multer  = require('multer');
+const fs = require('fs');
+const path = require('path');
+const upload = multer({ dest: path.join(__dirname, '../public/upload/') });
 
 router.post('/all', function (req, res) {
     db.query(sql.teacher.all, []).then(function ([err, results]) {
@@ -60,11 +64,55 @@ router.post('/addClass', function (req, res) {
       db.json(res, { type: 1, msg: "添加班级成功", data: results })
     }
     throw err
+  }).catch(function (err) {
+    throw err
+  })
+})
+
+router.post('/addCourse', function (req, res) {
+  var params = req.body
+
+  db.query(sql.courseTable.add, [params.tno, params.cname, params.cdate, params.stime, params.etime, params.address]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "课表已存在!" })
+    }
+    else {
+      db.json(res, { type: 1, msg: "添加课表成功", data: results })
+    }
+    throw err
+  }).catch(function (err) {
+    throw err
   })
 })
 
 router.post('/all',function(req,res,next) {
   db.query(sql.teacher.all).then(function([err,results]){
+    if(err) {
+      db.json(res,{type: 0, msg: "查询失败"})
+    }
+    else {
+      db.json(res,{type: 1, msg: "查询成功", data: results})
+    }
+  }).catch(function(err) {
+    throw err
+  })
+})
+
+router.post('/one',function(req,res,next) {
+  db.query(sql.teacher.check, [req.body.tno]).then(function([err,results]){
+    if(err) {
+      db.json(res,{type: 0, msg: "查询失败"})
+    }
+    else {
+      db.json(res,{type: 1, msg: "查询成功", data: results})
+    }
+  }).catch(function(err) {
+    throw err
+  })
+})
+
+router.post('/stu',function(req,res,next) {
+  db.query(sql.stu.search, [req.body.tno]).then(function([err,results]){
     if(err) {
       db.json(res,{type: 0, msg: "查询失败"})
     }
@@ -88,5 +136,14 @@ router.post('/deleteClass',function(req,res,next) {
     throw err
   })
 })
+
+router.post('/upload', upload.single('upload_file'), function(req, res) {
+  var temp_path = req.file.path;
+  var ext = '.' + req.file.originalname.split('.')[1];
+  var target_path = req.file.path + ext;
+  var _filename = req.file.filename + ext;
+  var filePath = '/upload/' + _filename;
+  console.log("Uploading: " + _filename);
+});
 
 module.exports = router

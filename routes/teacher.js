@@ -8,16 +8,16 @@ const path = require('path');
 const upload = multer({ dest: path.join(__dirname, '../public/upload/') });
 
 router.post('/all', function (req, res) {
-    db.query(sql.teacher.all, []).then(function ([err, results]) {
-        if (err) {
-            db.json(res, { type: 0, msg: "查询教师列表失败" })
-        }
-        else {
-            db.json(res, { type: 1, msg: "查询教师列表成功", data: results })
-        }
-    }).catch(function (err) {
-        throw err
-    })
+  db.query(sql.teacher.all, []).then(function ([err, results]) {
+    if (err) {
+        db.json(res, { type: 0, msg: "查询教师列表失败" })
+    }
+    else {
+        db.json(res, { type: 1, msg: "查询教师列表成功", data: results })
+    }
+  }).catch(function (err) {
+      throw err
+  })
 })
 router.post('/update', function (req, res) {
   var params = req.body
@@ -53,6 +53,21 @@ router.post('/updateClass', function (req, res) {
     throw err
   })
 })
+router.post('/updatePwd', function (req, res) {
+  var params = req.body
+
+  db.query(sql.user.updatePwd, [params.pwd, params.tno]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "更新密码失败!" })
+    }
+    else {
+      db.json(res, { type: 1, msg: "更新密码成功", data: results })
+    }
+  }).catch(function (err) {
+    throw err
+  })
+})
+
 router.post('/addClass', function (req, res) {
   var params = req.body
 
@@ -63,7 +78,6 @@ router.post('/addClass', function (req, res) {
     else {
       db.json(res, { type: 1, msg: "添加班级成功", data: results })
     }
-    throw err
   }).catch(function (err) {
     throw err
   })
@@ -79,7 +93,48 @@ router.post('/addCourse', function (req, res) {
     else {
       db.json(res, { type: 1, msg: "添加课表成功", data: results })
     }
+  }).catch(function (err) {
     throw err
+  })
+})
+router.post('/search', function (req, res) {
+  var params = req.body
+
+  db.query(sql.courseTable.search, [params.tno]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "课表不存在!" })
+    }
+    else {
+      db.json(res, { type: 1, msg: "查询课表成功", data: results })
+    }
+  }).catch(function (err) {
+    throw err
+  })
+})
+router.post('/updateCt', function (req, res) {
+  var params = req.body
+
+  db.query(sql.courseTable.update, [params.cname, params.cdate, params.stime, params.etime, params.address, params.id]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "课表不存在!" })
+    }
+    else {
+      db.json(res, { type: 1, msg: "更新课表成功", data: results })
+    }
+  }).catch(function (err) {
+    throw err
+  })
+})
+router.post('/deleteCt', function (req, res) {
+  var params = req.body
+
+  db.query(sql.courseTable.delete, [params.id]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "课表不存在!" })
+    }
+    else {
+      db.json(res, { type: 1, msg: "课表删除成功", data: results })
+    }
   }).catch(function (err) {
     throw err
   })

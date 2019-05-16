@@ -6,7 +6,8 @@ module.exports = {
     delete: 'delete from user where uname=?',
     all: 'select * from user',
     update: 'update user set uname=? where uname=?',
-    update2: 'update user set uname=?, upwd=?, role=? where uname=?'
+    update2: 'update user set uname=?, upwd=?, role=? where uname=?',
+    updatePwd: 'update user set upwd=? where uname=?'
   },
   stu: {
     add: 'insert into stu (sno,sname,cname,avatar,sex) values (?,?,?,?,?)',
@@ -14,7 +15,8 @@ module.exports = {
     delete: 'delete from stu where sno=?',
     check: 'select * from stu where sno=?',
     all: 'select * from stu',
-    update: 'update stu set sname=?, cname=?, sex=? where sno=?'
+    update: 'update stu set sname=?, cname=?, sex=? where sno=?',
+    one: 'select * from stu where sno=?',
   },
   teacher: {
     add1: 'insert into teacher (tno,tname,sex,email,phone,address) values (?,?,?,?,?,?)',
@@ -28,9 +30,13 @@ module.exports = {
     add: 'insert into class (tno, cname) values(?, ?)',
     update: 'update class set tno=?, cname=? where cname=?',
     delete: 'delete from class where cname=?',
-    one: 'select * from class where tno=?'
+    one: 'select * from class where tno=?',
   },
   courseTable: {
-    add: 'insert into coursetable (tno, cname, cdate, stime, etime, address) values(?,?,?,?,?,?)'
+    add: 'insert into coursetable (tno, cname, cdate, stime, etime, address) values(?,?,?,?,?,?)',
+    search: 'select * from coursetable where tno=? order by cdate, stime',
+    delete: 'delete from coursetable where id=?',
+    update: 'update coursetable set cname=?, cdate=?, stime=?, etime=?, address=? where id=?',
+    early: 'select * from coursetable where cname=? and cdate=? order by stime'
   }
 }

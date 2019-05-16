@@ -4,7 +4,8 @@ var pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'bs'
+    database: 'bs',
+    timezone: '08:00'
 })
 exports.query = function (sql,params) {
     return new Promise(function(resolve,reject){

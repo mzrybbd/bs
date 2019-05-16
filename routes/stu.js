@@ -15,6 +15,18 @@ router.post('/all', function (req, res) {
     throw err
   })
 })
+router.post('/one', function (req, res) {
+  db.query(sql.stu.one, [req.body.sno]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "查询学生列表失败" })
+    }
+    else {
+      db.json(res, { type: 1, msg: "查询学生列表成功", data: results })
+    }
+  }).catch(function (err) {
+    throw err
+  })
+})
 
 router.post('/update', function (req, res) {
   var params = req.body
@@ -31,6 +43,20 @@ router.post('/update', function (req, res) {
           db.json(res, { type: 1, msg: "更新用户成功", data: results })
         }
       })
+    }
+  }).catch(function (err) {
+    throw err
+  })
+})
+router.post('/earlyTime', function (req, res) {
+  var params = req.body
+
+  db.query(sql.courseTable.early, [params.cname, params.cdate]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "课表不存在!" })
+    }
+    else {
+      db.json(res, { type: 1, msg: "查询课表成功", data: results[0] })
     }
   }).catch(function (err) {
     throw err

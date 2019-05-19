@@ -14,8 +14,6 @@ var stuRouter = require('./routes/stu');
 var teacherRouter = require('./routes/teacher');
 var systerRouter = require('./routes/syster');
 var classRouter = require('./routes/class');
-
-
 var app = express();
 
 

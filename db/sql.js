@@ -37,6 +37,13 @@ module.exports = {
     search: 'select * from coursetable where tno=? order by cdate, stime',
     delete: 'delete from coursetable where id=?',
     update: 'update coursetable set cname=?, cdate=?, stime=?, etime=?, address=? where id=?',
-    early: 'select * from coursetable where cname=? and cdate=? order by stime'
+    early: 'select * from coursetable where cname=? and cdate=? order by abs(stime-curtime())',
+    check: 'select * from coursetable where cname=? and cdate=? and (stime-curtime()) between -10000 and 500'
+  },
+  stu_kq: {
+    insert:　'insert into stu_kq(sno, date, stime, etime, stype, etype) values(?,?,?,?,?,?)',
+    update:  'update stu_kq set etime=?, etype=? where sno=? and date=curdate() and stime > date_sub(curtime() , interval 2 hour)',
+    updateId: 'update stu_kq set etime=?, etype=? where id=?',
+    check: 'select * from stu_kq where sno=? and date=curdate() and stime > date_sub(curtime() , interval 2 hour) and stime < curtime()'
   }
 }

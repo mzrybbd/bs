@@ -88,6 +88,20 @@ router.post('/updateClass', function (req, res) {
     throw err
   })
 })
+router.post('/updateC', function (req, res) {
+  var params = req.body
+
+  db.query(sql.class.updateClass, [params.newCname, params.oldCname]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "更新班级失败!" })
+    }
+    else {
+      db.json(res, { type: 1, msg: "更新班级成功", data: results })
+    }
+  }).catch(function (err) {
+    throw err
+  })
+})
 router.post('/updatePwd', function (req, res) {
   var params = req.body
 
@@ -121,7 +135,7 @@ router.post('/addClass', function (req, res) {
 router.post('/addCourse', function (req, res) {
   var params = req.body
 
-  db.query(sql.courseTable.add, [params.tno, params.cname, params.cdate, params.stime, params.etime, params.address]).then(function ([err, results]) {
+  db.query(sql.courseTable.add, [params.tno, params.cname, params.cdate,  params.cweek, params.stime, params.etime, params.address]).then(function ([err, results]) {
     if (err) {
       db.json(res, { type: 0, msg: "课表已存在!" })
     }
@@ -146,10 +160,11 @@ router.post('/search', function (req, res) {
     throw err
   })
 })
+
 router.post('/updateCt', function (req, res) {
   var params = req.body
 
-  db.query(sql.courseTable.update, [params.cname, params.cdate, params.stime, params.etime, params.address, params.id]).then(function ([err, results]) {
+  db.query(sql.courseTable.update, [params.cname, params.cdate, params.stime, params.etime, params.address, params.cweek, params.id]).then(function ([err, results]) {
     if (err) {
       db.json(res, { type: 0, msg: "课表不存在!" })
     }
@@ -220,7 +235,13 @@ router.post('/deleteClass',function(req,res,next) {
       db.json(res, {type: 0, msg: "删除失败"})
     }
     else {
-      db.json(res, {type: 1, msg: "删除成功", data: results})
+      db.query(sql.courseTable.deleteCT, [req.body.cname]).then(function([err, results]){
+        if(err) {
+          db.json(res, {type:0, msg: '删除失败'})
+        }else{
+          db.json(res, {type: 1, msg: "删除成功", data: results})
+        }
+      })
     }
   }).catch(function(err) {
     throw err

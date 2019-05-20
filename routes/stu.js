@@ -27,6 +27,34 @@ router.post('/one', function (req, res) {
     throw err
   })
 })
+router.post('/select', function (req, res) {
+  var params = req.body
+
+  db.query(sql.courseTable.select, [params.cname]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "课表不存在!" })
+    }
+    else {
+      db.json(res, { type: 1, msg: "查询课表成功", data: results })
+    }
+  }).catch(function (err) {
+    throw err
+  })
+})
+router.post('/checkCname', function (req, res) {
+  var params = req.body
+
+  db.query(sql.stu.check, [params.sno]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "查询出左" })
+    }
+    else {
+      db.json(res, { type: 1, msg: "查询课表成功", data: results })
+    }
+  }).catch(function (err) {
+    throw err
+  })
+})
 
 router.post('/update', function (req, res) {
   var params = req.body
@@ -57,7 +85,7 @@ router.post('/earlyTime', function (req, res) {
       db.json(res, { type: 0, msg: "课表不存在" })
     }
     else {
-      db.json(res, { type: 1, msg: "查询课表成功", data: results[0] })
+      db.json(res, { type: 1, msg: "查询课表成功", data: results })
     }
   }).catch(function (err) {
     throw err
@@ -81,7 +109,7 @@ router.post('/checkIsQd', function (req, res) {
 router.post('/qiandao', function (req, res) {
   var params = req.body
 
-  db.query(sql.stu_kq.insert, [params.sno, params.date, params.stime,  params.etime, params.stype, params.etype]).then(function ([err, results]) {
+  db.query(sql.stu_kq.insert, [params.sno, params.date, params.stime,  params.etime, params.stype, params.etype, params.kweek]).then(function ([err, results]) {
     if (err) {
       db.json(res, { type: 0, msg: "签到出错!" })
     }

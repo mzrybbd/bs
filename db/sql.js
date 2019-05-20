@@ -29,19 +29,23 @@ module.exports = {
     all: 'select * from class',
     add: 'insert into class (tno, cname) values(?, ?)',
     update: 'update class set tno=?, cname=? where cname=?',
+    updateClass: 'update class set cname=? where cname=?',
     delete: 'delete from class where cname=?',
     one: 'select * from class where tno=?',
   },
   courseTable: {
-    add: 'insert into coursetable (tno, cname, cdate, stime, etime, address) values(?,?,?,?,?,?)',
+    add: 'insert into coursetable (tno, cname, cdate, cweek, stime, etime, address) values(?,?,?,?,?,?,?)',
     search: 'select * from coursetable where tno=? order by cdate, stime',
+    select: 'select * from coursetable where cname=? order by cdate, stime',
+    deleteCT: 'delete from coursetable where cname=?',
     delete: 'delete from coursetable where id=?',
-    update: 'update coursetable set cname=?, cdate=?, stime=?, etime=?, address=? where id=?',
-    early: 'select * from coursetable where cname=? and cdate=? order by abs(stime-curtime())',
+    update: 'update coursetable set cname=?, cdate=?, stime=?, etime=?, address=?, cweek=? where id=?',
+    // early: 'select * from coursetable where cname=? and cdate=? order by abs(stime-curtime())',
+    early: 'select * from coursetable where cname=? and cdate=? order by stime',
     check: 'select * from coursetable where cname=? and cdate=? and (stime-curtime()) between -10000 and 500'
   },
   stu_kq: {
-    insert:　'insert into stu_kq(sno, date, stime, etime, stype, etype) values(?,?,?,?,?,?)',
+    insert:　'insert into stu_kq(sno, date, stime, etime, stype, etype, kweek) values(?,?,?,?,?,?,?)',
     update:  'update stu_kq set etime=?, etype=? where sno=? and date=curdate() and stime > date_sub(curtime() , interval 2 hour)',
     updateId: 'update stu_kq set etime=?, etype=? where id=?',
     check: 'select * from stu_kq where sno=? and date=curdate() and stime > date_sub(curtime() , interval 2 hour) and stime < curtime()'

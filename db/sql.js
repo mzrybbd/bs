@@ -49,5 +49,6 @@ module.exports = {
     update:  'update stu_kq set etime=?, etype=? where sno=? and date=curdate() and stime > date_sub(curtime() , interval 2 hour)',
     updateId: 'update stu_kq set etime=?, etype=? where id=?',
     check: 'select * from stu_kq where sno=? and date=curdate() and stime > date_sub(curtime() , interval 2 hour) and stime < curtime()'
-  }
+  },
+  num: 'CALL num(?, ?, @a, @b, @c, @d, @e, @f)'
 }

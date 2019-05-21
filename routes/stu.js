@@ -114,7 +114,16 @@ router.post('/qiandao', function (req, res) {
       db.json(res, { type: 0, msg: "签到出错!" })
     }
     else {
-      db.json(res, { type: 1, msg: "添加成功", data: results })
+      db.query(sql.num, [params.sno, params.v_cname]).then(function ([err, results]) {
+        if (err) {
+          db.json(res, { type: 0, msg: "更新签到出错!" })
+        }
+        else {
+          db.json(res, { type: 1, msg: "更新成功", data: results[0] })
+        }
+      }).catch(function (err) {
+        throw err
+      })
     }
   }).catch(function (err) {
     throw err
@@ -128,7 +137,16 @@ router.post('/updateQd', function (req, res) {
       db.json(res, { type: 0, msg: "更新签到出错!" })
     }
     else {
-      db.json(res, { type: 1, msg: "更新成功", data: results[0] })
+      db.query(sql.num, [params.sno, params.v_cname]).then(function ([err, results]) {
+        if (err) {
+          db.json(res, { type: 0, msg: "更新签到出错!" })
+        }
+        else {
+          db.json(res, { type: 1, msg: "更新成功", data: results[0] })
+        }
+      }).catch(function (err) {
+        throw err
+      })
     }
   }).catch(function (err) {
     throw err
@@ -161,6 +179,20 @@ router.post('/check', function (req, res) {
       }else{
         db.json(res, { type: 1, msg: "课表存在", data: { wish: true, id: results[0].id, data: results[0] } })
       }
+    }
+  }).catch(function (err) {
+    throw err
+  })
+})
+router.post('/total_kq', function (req, res) {
+  var params = req.body
+
+  db.query(sql.num, [params.v_sno, params.v_cname]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "更新签到出错!" })
+    }
+    else {
+      db.json(res, { type: 1, msg: "更新成功", data: results[0] })
     }
   }).catch(function (err) {
     throw err

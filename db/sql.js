@@ -58,6 +58,17 @@ module.exports = {
   stu_experiment_kq: {
     kq_sj: "select a.sno, b.sname, b.cname, a.late_num, a.early_num, a.late_early_num, a.absence_num, a.normal_num, a.total_num  from stu_experiment_kq as a join (select * from stu where cname in (select cname from class where tno=?)) as b where a.sno=b.sno",
   },
+  teacher_experiment: {
+    add: 'insert into teacher_experiment(tno, name) values(?,?)',
+    check: 'select count(*) as num from teacher_experiment where tno=? and name=?',
+    one: 'select * from teacher_experiment where tno=?',
+    delete: 'delete from teacher_experiment where tno=? and name=?'
+  },
+  stu_experiment_score: {
+  },
+  stu_score_table: {
+    add: 'insert into stu_score_table(tno, name) values(?,?)',
+  },
   num: 'CALL num(?, ?, @a, @b, @c, @d, @e, @f)',
   kq: 'CALL kq( @a, @b, @c, @d, @e, @f, @g, @h, @i, @x, @y, ?, ?)'
 }

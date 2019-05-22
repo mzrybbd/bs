@@ -117,6 +117,65 @@ router.post('/sj_kq', function (req, res) {
     throw err
   })
 })
+router.post('/add_exp', function (req, res) {
+  var params = req.body
+
+  
+  db.query(sql.teacher_experiment.check, [params.tno, params.name]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "查询失败!" })
+    }
+    else {
+      if(results[0].num === 0){
+        db.query(sql.teacher_experiment.add, [params.tno, params.name]).then(function ([err, results]) {
+          if(err){
+            db.json(res, { type: 0, msg: "添加失败!" })
+          }
+          else{
+            db.json(res, { type: 1, msg: "添加成功", data: results })
+          }
+        }).catch(function(err) {
+          console.log(err)
+        })
+      }else{
+        db.json(res, { type: 1, msg: "添加成功", data: results })
+      }
+    }
+  }).catch(function (err) {
+    throw err
+  })
+})
+router.post('/exp_one', function (req, res) {
+  var params = req.body
+
+  db.query(sql.teacher_experiment.one, [params.tno]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "查询出错!" })
+    }
+    else {
+      db.json(res, { type: 1, msg: "查询成功", data: results})
+
+    }
+  }).catch(function (err) {
+    throw err
+  })
+})
+router.post('/exp_del', function (req, res) {
+  var params = req.body
+
+  db.query(sql.teacher_experiment.delete, [params.tno, params.name]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "删除出错!" })
+    }
+    else {
+      db.json(res, { type: 1, msg: "删除成功", data: results})
+
+    }
+  }).catch(function (err) {
+    throw err
+  })
+})
+
 router.post('/qq_sno', function (req, res) {
   var params = req.body
 
@@ -295,7 +354,19 @@ router.post('/one',function(req,res,next) {
 })
 
 router.post('/stu',function(req,res,next) {
-  db.query(sql.stu.search, [req.body.tno]).then(function([err,results]){
+  db.query(req.body.str, [req.body.tno]).then(function([err,results]){
+    if(err) {
+      db.json(res,{type: 0, msg: "查询失败"})
+    }
+    else {
+      db.json(res,{type: 1, msg: "查询成功", data: results})
+    }
+  }).catch(function(err) {
+    throw err
+  })
+})
+router.post('/score',function(req,res,next) {
+  db.query(req.body.str, [req.body.tno]).then(function([err,results]){
     if(err) {
       db.json(res,{type: 0, msg: "查询失败"})
     }

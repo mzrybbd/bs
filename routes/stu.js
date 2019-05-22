@@ -184,6 +184,18 @@ router.post('/check', function (req, res) {
     throw err
   })
 })
+router.post('/ka_one', function (req, res) {
+  db.query(sql.stu_kq.kq_one, [req.body.sno]).then(function ([err, results]) {
+    if (err) {
+        db.json(res, { type: 0, msg: "查询考勤失败" })
+    }
+    else {
+        db.json(res, { type: 1, msg: "查询考勤列表成功", data: results })
+    }
+  }).catch(function (err) {
+      throw err
+  })
+})
 router.post('/total_kq', function (req, res) {
   var params = req.body
 

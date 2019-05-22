@@ -50,11 +50,14 @@ router.post('/login', function (req, res) {
   db.query(sql.user.check, [params.uid]).then(function ([err, results]) {
     if (err) {
       db.json(res, { type: 0, msg: "查询失败" })
+    }else{
+      if (results.length === 0) {
+        db.json(res, { type: 0, msg: "用户名不存在" })
+      }
+      else 
+        db.json(res, { type: 1, msg: "查询用户成功", data: results[0] })
     }
-    if (results.length === 0) {
-      db.json(res, { type: 0, msg: "用户名不存在" })
-    }
-    db.json(res, { type: 1, msg: "查询用户成功", data: results[0] })
+   
   }).catch(function (err) {
     throw err
   })
@@ -67,10 +70,13 @@ router.post('/check', function (req, res) {
     if (err) {
       db.json(res, { type: 0, msg: "查询失败" })
     }
-    if (results.length === 0) {
-      db.json(res, { type: 0, msg: "用户名不存在" })
+    else{
+      if (results.length === 0) {
+        db.json(res, { type: 0, msg: "用户名不存在" })
+      }
+      else 
+        db.json(res, { type: 1, msg: "查询用户成功", data: results[0] })
     }
-    db.json(res, { type: 1, msg: "查询用户成功", data: results[0] })
   }).catch(function (err) {
     throw err
   })

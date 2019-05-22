@@ -46,9 +46,18 @@ module.exports = {
   },
   stu_kq: {
     insert:　'insert into stu_kq(sno, date, stime, etime, stype, etype, kweek) values(?,?,?,?,?,?,?)',
-    update:  'update stu_kq set etime=?, etype=? where sno=? and date=curdate() and stime > date_sub(curtime() , interval 2 hour)',
+    update:  'update stu_kq set etime=?, etype=? where sno=? and date=curdate() and stime >= date_sub(curtime() , interval 2 hour)',
     updateId: 'update stu_kq set etime=?, etype=? where id=?',
-    check: 'select * from stu_kq where sno=? and date=curdate() and stime > date_sub(curtime() , interval 2 hour) and stime < curtime()'
+    check: 'select * from stu_kq where sno=? and date=curdate() and stime >= date_sub(curtime() , interval 2 hour) and stime < curtime()',
+    kq_jl: 'select a.sno, b.sname, b.cname, a.date, a.stime, a.etime, a.stype, a.kweek, a.etype from stu_kq as a join (select * from stu where cname in (select cname from class where tno=?)) as b where a.sno=b.sno',
+    kq_one: 'select a.sno, b.sname, a.date, a.stime, a.etime, a.stype, a.kweek, a.etype from stu_kq as a join (select * from stu where sno=?) as b where a.sno=b.sno',
+    kq_jl_query: 'select a.sno, b.sname, b.cname, a.date, a.stime, a.etime, a.stype, a.kweek, a.etype from stu_kq as a join (select * from stu where cname in (select cname from class where tno=?)) as b where a.sno=b.sno and b.cname=? and a.date=?',
+    kq_sj: "select a.sno, b.sname, b.cname, a.date, a.stime, a.etime, a.stype, a.kweek, a.etype  from stu_kq as a join (select * from stu where cname in (select cname from class where tno=?)) as b where a.sno=b.sno and stime >= date_sub(time(?),interval 5 minute) and stime<=date_sub(time(?),interval -1 hour) and a.date=curdate()",
+    qq_sno: 'select sno, sname from  stu where cname=? AND sno not in(select sno from stu_kq where date=curdate() and stime>=date_sub(time(?),interval 5 minute) and stime<=date_sub(time(?),interval -1 hour))', 
   },
-  num: 'CALL num(?, ?, @a, @b, @c, @d, @e, @f)'
+  stu_experiment_kq: {
+    kq_sj: "select a.sno, b.sname, b.cname, a.late_num, a.early_num, a.late_early_num, a.absence_num, a.normal_num, a.total_num  from stu_experiment_kq as a join (select * from stu where cname in (select cname from class where tno=?)) as b where a.sno=b.sno",
+  },
+  num: 'CALL num(?, ?, @a, @b, @c, @d, @e, @f)',
+  kq: 'CALL kq( @a, @b, @c, @d, @e, @f, @g, @h, @i, @x, @y, ?, ?)'
 }

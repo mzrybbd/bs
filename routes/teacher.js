@@ -54,6 +54,84 @@ router.post('/all', function (req, res) {
       throw err
   })
 })
+router.post('/ka_jl', function (req, res) {
+  db.query(sql.stu_kq.kq_jl, [req.body.tno]).then(function ([err, results]) {
+    if (err) {
+        db.json(res, { type: 0, msg: "查询考勤失败" })
+    }
+    else {
+        db.json(res, { type: 1, msg: "查询考勤列表成功", data: results })
+    }
+  }).catch(function (err) {
+      throw err
+  })
+})
+router.post('/total_kqt', function (req, res) {
+  db.query(sql.stu_experiment_kq.kq_sj, [req.body.tno]).then(function ([err, results]) {
+    if (err) {
+        db.json(res, { type: 0, msg: "查询考勤失败" })
+    }
+    else {
+        db.json(res, { type: 1, msg: "查询考勤列表成功", data: results })
+    }
+  }).catch(function (err) {
+      throw err
+  })
+})
+router.post('/ka_jl_query', function (req, res) {
+  db.query(sql.stu_kq.kq_jl_query, [req.body.tno, req.body.cname, req.body.date]).then(function ([err, results]) {
+    if (err) {
+        db.json(res, { type: 0, msg: "查询考勤失败" })
+    }
+    else {
+        db.json(res, { type: 1, msg: "查询考勤列表成功", data: results })
+    }
+  }).catch(function (err) {
+      throw err
+  })
+})
+router.post('/kq_sj', function (req, res) {
+  db.query(sql.stu_kq.kq_sj, [req.body.tno,req.body.stime,req.body.etime]).then(function ([err, results]) {
+    if (err) {
+        db.json(res, { type: 0, msg: "查询考勤失败" })
+    }
+    else {
+        db.json(res, { type: 1, msg: "查询考勤列表成功", data: results })
+    }
+  }).catch(function (err) {
+      throw err
+  })
+})
+router.post('/sj_kq', function (req, res) {
+  var params = req.body
+
+  db.query(sql.kq, [params.tno, params.stime]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "更新签到出错!" })
+    }
+    else {
+      db.json(res, { type: 1, msg: "更新成功", data: results[0] })
+
+    }
+  }).catch(function (err) {
+    throw err
+  })
+})
+router.post('/qq_sno', function (req, res) {
+  var params = req.body
+
+  db.query(sql.stu_kq.qq_sno, [params.cname, params.stime,params.etime]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "查询出错!" })
+    }
+    else {
+      db.json(res, { type: 1, msg: "查询成功", data: results})
+
+    }
+  }).catch(function (err) {
+    throw err
+  })
+})
 router.post('/update', function (req, res) {
   var params = req.body
 

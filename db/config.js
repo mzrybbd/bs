@@ -11,7 +11,7 @@ exports.query = function (sql,params) {
     return new Promise(function(resolve,reject){
         pool.getConnection(function(err,connection) {
             if(err) {
-                reject(err)
+                return reject(err)
             }else {
                 connection.query(sql,params,function(err,results) {
                     connection.release()

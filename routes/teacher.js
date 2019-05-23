@@ -105,7 +105,7 @@ router.post('/kq_sj', function (req, res) {
 router.post('/sj_kq', function (req, res) {
   var params = req.body
 
-  db.query(sql.kq, [params.tno, params.stime]).then(function ([err, results]) {
+  db.query(sql.kq, [params.tno]).then(function ([err, results]) {
     if (err) {
       db.json(res, { type: 0, msg: "更新签到出错!" })
     }
@@ -303,7 +303,7 @@ router.post('/updateCt', function (req, res) {
 
   db.query(sql.courseTable.update, [params.cname, params.cdate, params.stime, params.etime, params.address, params.cweek, params.id]).then(function ([err, results]) {
     if (err) {
-      db.json(res, { type: 0, msg: "课表不存在!" })
+      db.json(res, { type: 0, msg: "更新失败!" })
     }
     else {
       db.json(res, { type: 1, msg: "更新课表成功", data: results })
@@ -312,6 +312,36 @@ router.post('/updateCt', function (req, res) {
     throw err
   })
 })
+
+router.post('/update_kq_system', function (req, res) {
+  var params = req.body
+
+  db.query(sql.kq_system.update, [params.late_score, params.early_score, params.late_early_score, params.absence_score, params.tno]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "更新失败!" })
+    }
+    else {
+      db.json(res, { type: 1, msg: "更新成功", data: results })
+    }
+  }).catch(function (err) {
+    throw err
+  })
+})
+router.post('/query_kq_system', function (req, res) {
+  var params = req.body
+
+  db.query(sql.kq_system.query, [params.tno]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "查询失败!" })
+    }
+    else {
+      db.json(res, { type: 1, msg: "查询成功", data: results })
+    }
+  }).catch(function (err) {
+    throw err
+  })
+})
+
 router.post('/deleteCt', function (req, res) {
   var params = req.body
 
@@ -368,10 +398,10 @@ router.post('/stu',function(req,res,next) {
 router.post('/score',function(req,res,next) {
   db.query(req.body.str, [req.body.tno]).then(function([err,results]){
     if(err) {
-      db.json(res,{type: 0, msg: "查询失败"})
+      db.json(res,{type: 0, msg: "操作失败"})
     }
     else {
-      db.json(res,{type: 1, msg: "查询成功", data: results})
+      db.json(res,{type: 1, msg: "操作成功", data: results})
     }
   }).catch(function(err) {
     throw err

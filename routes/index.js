@@ -23,6 +23,9 @@ router.post('/register', function (req, res) {
 	        db.json(res, { type: 0, msg: "注册失败" })
 	      }
 	      else {
+          db.query(sql.stu_score_table.add2, [params.uid])
+          db.query(sql.stu_experiment_score.add, [params.uid])
+          db.query(sql.stu_experiment_kq.add, [params.uid])
 	      	db.json(res, { type: 1, msg: "注册成功", data: { id: results.insertId } })
 	      }
 	    })
@@ -34,6 +37,7 @@ router.post('/register', function (req, res) {
 	        db.json(res, { type: 0, msg: "注册失败" })
 	    	}
 	    	else {
+          db.query(sql.kq_system.add, [params.uid])
 	    		db.json(res, { type: 1, msg: "注册成功", data: { id: results.insertId } })
 	    	}
 	    })

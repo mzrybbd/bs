@@ -67,12 +67,21 @@ router.post('/ka_jl', function (req, res) {
   })
 })
 router.post('/total_kqt', function (req, res) {
-  db.query(sql.stu_experiment_kq.kq_sj, [req.body.tno]).then(function ([err, results]) {
+  
+  db.query(sql.kq_final_update, [req.body.tno]).then(function ([err, results]) {
     if (err) {
         db.json(res, { type: 0, msg: "查询考勤失败" })
     }
     else {
-        db.json(res, { type: 1, msg: "查询考勤列表成功", data: results })
+      db.query(sql.stu_experiment_kq.kq_sj, [req.body.tno]).then(function ([err, results]) {
+        if (err) {
+          db.json(res, { type: 0, msg: "查询考勤失败" })
+        }
+        else {
+          db.json(res, { type: 1, msg: "查询考勤列表成功", data: results })
+        }
+      })
+        
     }
   }).catch(function (err) {
       throw err
@@ -297,6 +306,20 @@ router.post('/search', function (req, res) {
     throw err
   })
 })
+router.post('/search2', function (req, res) {
+  var params = req.body
+
+  db.query(sql.courseTable.search2, [params.tno]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "课表不存在!" })
+    }
+    else {
+      db.json(res, { type: 1, msg: "查询课表成功", data: results })
+    }
+  }).catch(function (err) {
+    throw err
+  })
+})
 
 router.post('/updateCt', function (req, res) {
   var params = req.body
@@ -340,6 +363,38 @@ router.post('/query_kq_system', function (req, res) {
   }).catch(function (err) {
     throw err
   })
+})
+router.post('/total_score', function (req, res) {
+  var params = req.body
+  db.query(sql.final_score, [req.body.tno]).then(function ([err, results]) {
+    if (err) {
+        db.json(res, { type: 0, msg: "查询考勤失败" })
+    }
+    else {
+      db.query(sql.total_score, [req.body.tno]).then(function ([err, results]) {
+        if (err) {
+          db.json(res, { type: 0, msg: "查询失败" })
+        }
+        else {
+          db.json(res, { type: 1, msg: "查询成功", data: results })
+        }
+      })
+        
+    }
+  }).catch(function (err) {
+      throw err
+  })
+
+  // db.query(sql.total_score, [params.tno]).then(function ([err, results]) {
+  //   if (err) {
+  //     db.json(res, { type: 0, msg: "查询失败!" })
+  //   }
+  //   else {
+  //     db.json(res, { type: 1, msg: "查询成功", data: results })
+  //   }
+  // }).catch(function (err) {
+  //   throw err
+  // })
 })
 
 router.post('/deleteCt', function (req, res) {

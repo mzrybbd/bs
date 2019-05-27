@@ -36,6 +36,7 @@ module.exports = {
   courseTable: {
     add: 'insert into coursetable (tno, cname, cdate, cweek, stime, etime, address) values(?,?,?,?,?,?,?)',
     search: 'select * from coursetable where tno=? order by cdate, stime',
+    search2: 'select * from coursetable where tno=? and cdate>curdate() || (stime>=curtime() && cdate=curdate()) order by cdate, stime ',
     select: 'select * from coursetable where cname=? order by cdate, stime',
     deleteCT: 'delete from coursetable where cname=?',
     delete: 'delete from coursetable where id=?',
@@ -52,11 +53,11 @@ module.exports = {
     kq_jl: 'select a.sno, b.sname, b.cname, a.date, a.stime, a.etime, a.stype, a.kweek, a.etype from stu_kq as a join (select * from stu where cname in (select cname from class where tno=?)) as b where a.sno=b.sno',
     kq_one: 'select a.sno, b.sname, a.date, a.stime, a.etime, a.stype, a.kweek, a.etype from stu_kq as a join (select * from stu where sno=?) as b where a.sno=b.sno',
     kq_jl_query: 'select a.sno, b.sname, b.cname, a.date, a.stime, a.etime, a.stype, a.kweek, a.etype from stu_kq as a join (select * from stu where cname in (select cname from class where tno=?)) as b where a.sno=b.sno and b.cname=? and a.date=?',
-    kq_sj: "select a.sno, b.sname, b.cname, a.date, a.stime, a.etime, a.stype, a.kweek, a.etype  from stu_kq as a join (select * from stu where cname in (select cname from class where tno=?)) as b where a.sno=b.sno and stime >= date_sub(time(?),interval 5 minute) and stime<=date_sub(time(?),interval -1 hour) and a.date=curdate()",
+    kq_sj: "select a.sno, b.sname, b.cname, a.date, a.stime, a.etime, a.stype, a.kweek, a.etype from stu_kq as a join (select * from stu where cname in (select cname from class where tno=?)) as b where a.sno=b.sno and stime >= date_sub(time(?),interval 5 minute) and stime<=date_sub(time(?),interval -1 hour) and a.date=curdate()",
     qq_sno: 'select sno, sname from  stu where cname=? AND sno not in(select sno from stu_kq where date=curdate() and stime>=date_sub(time(?),interval 5 minute) and stime<=date_sub(time(?),interval -1 hour))', 
   },
   stu_experiment_kq: {
-    kq_sj: "select a.sno, b.sname, b.cname, a.late_num, a.early_num, a.late_early_num, a.absence_num, a.normal_num, a.total_num  from stu_experiment_kq as a join (select * from stu where cname in (select cname from class where tno=?)) as b where a.sno=b.sno",
+    kq_sj: "select a.sno, b.sname, b.cname, a.late_num, a.early_num, a.late_early_num, a.absence_num,a.kq_score, a.normal_num, a.total_num  from stu_experiment_kq as a join (select * from stu where cname in (select cname from class where tno=?)) as b where a.sno=b.sno",
     add: 'insert into stu_experiment_kq(sno) values(?)'
   },
   teacher_experiment: {
@@ -75,7 +76,11 @@ module.exports = {
   kq_system: {
     update: 'update kq_system set late_score=?, early_score=?, late_early_score=?, absence_score=? where tno=?',
     add: 'insert into kq_system(tno) values(?)',
+    query: 'select * from kq_system where tno = ?'
   },
+  total_score: 'select * from total_score where cname in (select cname from class where tno=?)',
   num: 'CALL num(?, ?, @a, @b, @c, @d, @e, @f)',
-  kq: 'CALL kq( @a, @b, @c, @d, @e, @f, @g, @h, @i, @x, @y, ?, @z)'
+  kq: 'CALL kq( @a, @b, @c, @d, @e, @f, @g, @h, @i, @x, @y, ?, @z)',
+  kq_final_update: 'CALL kq_final_update(?)',
+  final_score: 'CALL final_score(?)'
 }

@@ -82,5 +82,24 @@ module.exports = {
   num: 'CALL num(?, ?, @a, @b, @c, @d, @e, @f)',
   kq: 'CALL kq( @a, @b, @c, @d, @e, @f, @g, @h, @i, @x, @y, ?, @z)',
   kq_final_update: 'CALL kq_final_update(?)',
-  final_score: 'CALL final_score(?)'
+  final_score: 'CALL final_score(?)',
+  stu_experiment_discuss: {
+    add: 'insert into stu_experiment_discuss(uid, content, name, role) values(?,?,?,?)',
+    all1: 'select * from stu_discuss where cname in (select cname from class where tno=? and name=?)',
+    all2: 'select * from teacher_discuss where tno=? and name=?'
+  },
+  s_t: 'select tno from s_t where sno=?',
+  s_t2: 'select * from s_t where sno=?',
+  experiment_submit_time: {
+    add: 'insert into experiment_submit_time(tno, name, cname, last_date) values (?,?,?,?)'
+  },
+  allScore: {
+    search1: 'select * from final_score where sno=?',
+    search2: 'select * from final_score where cname in (select cname from class where tno=?)'
+  },
+  stu_sumbit_file: {
+    insert: 'insert into stu_sumbit_file(sno, name,filename,submit_path) values(?,?,?,?) ',
+    update: 'update stu_sumbit_file set submit_path=?,filename=? where sno=? and name=?',
+    check: 'select * from stu_sumbit_file where sno=? and name=?'
+  }
 }

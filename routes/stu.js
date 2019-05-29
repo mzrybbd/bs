@@ -105,7 +105,83 @@ router.post('/checkIsQd', function (req, res) {
     throw err
   })
 })
+router.post('/tno', function (req, res) {
+  var params = req.body
 
+  db.query(sql.s_t, [params.sno]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "查询失败" })
+    }
+    else {
+      db.json(res, { type: 1, msg: "查询成功", data: results[0] })
+    }
+  }).catch(function (err) {
+    throw err
+  })
+})
+router.post('/tno2', function (req, res) {
+  var params = req.body
+
+  db.query(sql.s_t2, [params.sno]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "查询失败" })
+    }
+    else {
+      db.json(res, { type: 1, msg: "查询成功", data: results[0] })
+    }
+  }).catch(function (err) {
+    throw err
+  })
+})
+
+router.post('/submitRecord', function (req, res) {
+  var params = req.body
+
+  db.query(sql.stu_sumbit_file.check, [params.sno,params.name]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "查询失败" })
+    }
+    else {
+      if(results.length === 0){
+        db.query(sql.stu_sumbit_file.insert, [params.sno,params.name,params.filename,params.path]).then(function ([err, results]) {
+          if(err){
+            db.json(res, { type: 0, msg: "添加失败" })
+          }else{
+            db.json(res, { type: 1, msg: "添加成功", data: results[0] })
+          }
+        })
+      }else{
+        db.query(sql.stu_sumbit_file.update, [params.path, params.filename, params.sno,params.name]).then(function ([err, results]) {
+          if(err){
+            db.json(res, { type: 0, msg: "更新失败" })
+          }else{
+            db.json(res, { type: 1, msg: "更新成功", data: results[0] })
+          }
+        })
+      }
+    }
+  }).catch(function (err) {
+    throw err
+  })
+})
+router.post('/checkSubmit', function (req, res) {
+  var params = req.body
+
+  db.query(sql.stu_sumbit_file.check, [params.sno,params.name]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "查询失败!" })
+    }
+    else {
+      if(results.length > 0){
+        db.json(res, { type: 1, msg: "查询成功", data: {status: true} })
+      }else{
+        db.json(res, { type: 1, msg: "查询成功", data: {status: false} })
+      }
+    }
+  }).catch(function (err) {
+    throw err
+  })
+})
 router.post('/qiandao', function (req, res) {
   var params = req.body
 

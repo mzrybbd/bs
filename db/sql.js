@@ -11,6 +11,7 @@ module.exports = {
   },
   stu: {
     add: 'insert into stu (sno,sname,cname,avatar,sex) values (?,?,?,?,?)',
+    add2: 'insert into stu (sno,sname,cname) values (?,?,?)',
     search: 'select * from stu where cname in (select cname from class where tno=?)',
     delete: 'delete from stu where sno=?',
     check: 'select * from stu where sno=?',
@@ -61,9 +62,9 @@ module.exports = {
     add: 'insert into stu_experiment_kq(sno) values(?)'
   },
   teacher_experiment: {
-    add: 'insert into teacher_experiment(tno, name) values(?,?)',
+    add: 'insert into teacher_experiment(tno, name, indexs) values(?,?,?)',
     check: 'select count(*) as num from teacher_experiment where tno=? and name=?',
-    one: 'select * from teacher_experiment where tno=?',
+    one: 'select * from teacher_experiment where tno=? order by indexs',
     delete: 'delete from teacher_experiment where tno=? and name=?'
   },
   stu_experiment_score: {
@@ -91,15 +92,22 @@ module.exports = {
   s_t: 'select tno from s_t where sno=?',
   s_t2: 'select * from s_t where sno=?',
   experiment_submit_time: {
-    add: 'insert into experiment_submit_time(tno, name, cname, last_date) values (?,?,?,?)'
+    add: 'insert into experiment_submit_time(tno, name, cname, last_date) values (?,?,?,?)',
+    search: 'select * from experiment_submit_time where last_date >= curdate() and cname=(select cname from stu where sno=?) order by (last_date - curdate())',
+    query: 'select * from experiment_submit_time where tno=? order by name,last_date',
+    query2: 'select * from experiment_submit_time where tno=? and last_date >= curdate() order by name,last_date',
+    update: 'update experiment_submit_time set last_date=? where name=? and cname=?',
+    delete: 'delete from experiment_submit_time where name=? and cname=?'
   },
   allScore: {
     search1: 'select * from final_score where sno=?',
     search2: 'select * from final_score where cname in (select cname from class where tno=?)'
   },
   stu_sumbit_file: {
-    insert: 'insert into stu_sumbit_file(sno, name,filename,submit_path) values(?,?,?,?) ',
-    update: 'update stu_sumbit_file set submit_path=?,filename=? where sno=? and name=?',
-    check: 'select * from stu_sumbit_file where sno=? and name=?'
-  }
+    insert: 'insert into stu_sumbit_file(sno, name,filename,submit_path,size) values(?,?,?,?,?) ',
+    update: 'update stu_sumbit_file set submit_path=?,filename=?,size=? where sno=? and name=?',
+    check: 'select * from stu_sumbit_file where sno=? and name=?',
+    query: 'select * from stu_sumbit_file where sno=?',
+    all: 'select * from stu_sumbit_file where name=?'
+  },
 }

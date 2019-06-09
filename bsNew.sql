@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : bs
+ Source Server         : mzry
  Source Server Type    : MySQL
  Source Server Version : 80015
  Source Host           : localhost:3306
@@ -11,7 +11,7 @@
  Target Server Version : 80015
  File Encoding         : 65001
 
- Date: 29/05/2019 13:49:39
+ Date: 09/06/2019 13:17:52
 */
 
 SET NAMES utf8mb4;
@@ -33,8 +33,8 @@ CREATE TABLE `class`  (
 -- ----------------------------
 -- Records of class
 -- ----------------------------
+INSERT INTO `class` VALUES ('电商151班', '2015012000');
 INSERT INTO `class` VALUES ('电商152班', '2015012000');
-INSERT INTO `class` VALUES ('软工151班', '2015012000');
 INSERT INTO `class` VALUES ('软工152班', '2015012000');
 INSERT INTO `class` VALUES ('软工153班', '2015012000');
 
@@ -56,7 +56,7 @@ CREATE TABLE `coursetable`  (
   INDEX `ct_tno`(`tno`) USING BTREE,
   CONSTRAINT `ct_cname` FOREIGN KEY (`cname`) REFERENCES `class` (`cname`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `ct_tno` FOREIGN KEY (`tno`) REFERENCES `teacher` (`tno`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 75 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 80 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of coursetable
@@ -66,10 +66,13 @@ INSERT INTO `coursetable` VALUES (58, '2015012000', '电商152班', '2019-05-21'
 INSERT INTO `coursetable` VALUES (59, '2015012000', '电商152班', '2019-05-25', '星期一', '19:30:00', '21:20:00', '机房三层南');
 INSERT INTO `coursetable` VALUES (62, '2015012000', '电商152班', '2019-05-22', '星期三', '21:00:00', '22:54:00', '机房三层南');
 INSERT INTO `coursetable` VALUES (63, '2015012000', '软工153班', '2019-05-22', '星期三', '16:10:00', '17:50:00', '机房三层南');
-INSERT INTO `coursetable` VALUES (68, '2015012000', '软工153班', '2019-05-15', '星期三', '16:10:00', '17:50:00', '机房三层南');
-INSERT INTO `coursetable` VALUES (72, '2015012000', '软工153班', '2019-05-29', '星期六', '10:10:00', '12:00:00', '机房三层南');
+INSERT INTO `coursetable` VALUES (68, '2015012000', '软工153班', '2019-05-31', '星期三', '16:30:00', '18:20:00', '机房三层南');
+INSERT INTO `coursetable` VALUES (72, '2015012000', '软工153班', '2019-05-30', '星期六', '10:10:00', '12:00:00', '机房三层南');
 INSERT INTO `coursetable` VALUES (73, '2015012000', '软工153班', '2019-05-27', '星期五', '19:30:00', '21:20:00', '机房三层南');
-INSERT INTO `coursetable` VALUES (74, '2015012000', '软工151班', '2019-05-25', '星期六', '14:00:00', '15:50:00', '机房三层南');
+INSERT INTO `coursetable` VALUES (74, '2015012000', '软工153班', '2019-05-25', '星期六', '14:00:00', '15:50:00', '机房三层南');
+INSERT INTO `coursetable` VALUES (75, '2015012000', '电商151班', '2019-06-08', '星期六', '16:10:00', '17:50:00', '机房3楼');
+INSERT INTO `coursetable` VALUES (77, '2015012000', '电商151班', '2019-06-07', '星期五', '16:10:00', '17:50:00', '机房3楼');
+INSERT INTO `coursetable` VALUES (79, '2015012000', '电商151班', '2019-06-17', '星期五', '16:10:00', '18:00:00', '机房3楼');
 
 -- ----------------------------
 -- Table structure for experiment_submit_time
@@ -83,15 +86,19 @@ CREATE TABLE `experiment_submit_time`  (
   PRIMARY KEY (`tno`, `name`, `cname`) USING BTREE,
   INDEX `t_s_e_name`(`name`) USING BTREE,
   INDEX `teacher_submit_experiment_ibfk_1`(`cname`) USING BTREE,
+  CONSTRAINT `experiment_submit_time_ibfk_1` FOREIGN KEY (`cname`) REFERENCES `class` (`cname`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `t_s_e_name` FOREIGN KEY (`name`) REFERENCES `teacher_experiment` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `t_s_e_tno` FOREIGN KEY (`tno`) REFERENCES `teacher` (`tno`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `experiment_submit_time_ibfk_1` FOREIGN KEY (`cname`) REFERENCES `class` (`cname`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `t_s_e_tno` FOREIGN KEY (`tno`) REFERENCES `teacher` (`tno`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of experiment_submit_time
 -- ----------------------------
-INSERT INTO `experiment_submit_time` VALUES ('2015012000', '实验二', '软工152班', '2019-05-30');
+INSERT INTO `experiment_submit_time` VALUES ('2015012000', '实验三', '软工153班', '2019-06-22');
+INSERT INTO `experiment_submit_time` VALUES ('2015012000', '实验四', '电商151班', '2019-07-24');
+INSERT INTO `experiment_submit_time` VALUES ('2015012000', '实验四', '电商152班', '2019-07-24');
+INSERT INTO `experiment_submit_time` VALUES ('2015012000', '实验四', '软工152班', '2019-07-24');
+INSERT INTO `experiment_submit_time` VALUES ('2015012000', '实验四', '软工153班', '2019-07-24');
 
 -- ----------------------------
 -- Table structure for kq_system
@@ -113,23 +120,6 @@ CREATE TABLE `kq_system`  (
 -- ----------------------------
 INSERT INTO `kq_system` VALUES ('2015012000', 1, 2, 3, 4, 30);
 INSERT INTO `kq_system` VALUES ('20150128888', 0, 0, 0, 0, 30);
-
--- ----------------------------
--- Table structure for message_box
--- ----------------------------
-DROP TABLE IF EXISTS `message_box`;
-CREATE TABLE `message_box`  (
-  `id` int(11) NOT NULL,
-  `send_uname` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `receive_uname` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `content` blob NOT NULL,
-  `time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0),
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `send_uname`(`send_uname`) USING BTREE,
-  INDEX `receive_uname`(`receive_uname`) USING BTREE,
-  CONSTRAINT `receive_uname` FOREIGN KEY (`receive_uname`) REFERENCES `user` (`uname`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `send_uname` FOREIGN KEY (`send_uname`) REFERENCES `user` (`uname`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for stu
@@ -155,8 +145,15 @@ CREATE TABLE `stu`  (
 INSERT INTO `stu` VALUES ('2015012947', '李娟', '软工153班', NULL, '女', '2019-05-20 11:16:19');
 INSERT INTO `stu` VALUES ('2015012948', '王伟', '软工153班', NULL, '男', '2019-05-22 11:12:10');
 INSERT INTO `stu` VALUES ('2015012951', '张琦', '软工153班', NULL, '男', '2019-05-22 13:22:42');
+INSERT INTO `stu` VALUES ('2015012957', '黄飞鸿', '电商152班', NULL, NULL, '2019-06-08 15:13:37');
+INSERT INTO `stu` VALUES ('2015012958', '戴安娜', '电商152班', NULL, NULL, '2019-06-08 15:13:37');
+INSERT INTO `stu` VALUES ('2015012959', '陈硕硕', '电商152班', NULL, NULL, '2019-06-08 15:13:37');
+INSERT INTO `stu` VALUES ('2015012960', '施泽华', '电商152班', NULL, NULL, '2019-06-08 15:13:37');
+INSERT INTO `stu` VALUES ('2015012961', '花泽类', '电商152班', NULL, NULL, '2019-06-08 15:13:37');
 INSERT INTO `stu` VALUES ('2015012975', '石会雯', '电商152班', NULL, '女', '2019-05-17 09:38:13');
+INSERT INTO `stu` VALUES ('2015012977', 'wangzhi', '软工152班', '', '女', '2019-06-05 23:05:40');
 INSERT INTO `stu` VALUES ('2015012988', '司徒风', '电商152班', '', '男', '2019-05-25 16:16:34');
+INSERT INTO `stu` VALUES ('20150129999', 'df ', '电商152班', '', '男', '2019-06-05 23:09:36');
 
 -- ----------------------------
 -- Table structure for stu_experiment_discuss
@@ -174,23 +171,14 @@ CREATE TABLE `stu_experiment_discuss`  (
   INDEX `sus_name`(`name`) USING BTREE,
   CONSTRAINT `s_e_s_sno` FOREIGN KEY (`uid`) REFERENCES `user` (`uname`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `sus_name` FOREIGN KEY (`name`) REFERENCES `teacher_experiment` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 28 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of stu_experiment_discuss
 -- ----------------------------
-INSERT INTO `stu_experiment_discuss` VALUES (1, '2015012947', 'woshiygeren', '2019-05-27 19:13:56', '实验一', 0);
-INSERT INTO `stu_experiment_discuss` VALUES (6, '2015012951', '我是一个人', '2019-05-27 19:14:00', '实验一', 1);
-INSERT INTO `stu_experiment_discuss` VALUES (7, '2015012975', '我是一个人我是一个人我是一个人我是一个人我是一个人我是一个人我是一个人我是一个人我是一个人我是一个人我是一个人我是一个人我是一个人我是一个人我是一个人我是一个人我是一个人我是一个人', '2019-05-27 20:12:11', '实验一', 1);
-INSERT INTO `stu_experiment_discuss` VALUES (8, '2015012000', '43', '2019-05-27 19:42:49', '实验一', 0);
-INSERT INTO `stu_experiment_discuss` VALUES (9, '2015012000', '你说什么我听不懂', '2019-05-27 20:24:24', '实验一', 1);
-INSERT INTO `stu_experiment_discuss` VALUES (10, '2015012000', '我说的你竟然听不懂，哼，不聊了', '2019-05-27 20:24:43', '实验一', 1);
-INSERT INTO `stu_experiment_discuss` VALUES (11, '2015012000', '你干嘛', '2019-05-27 20:25:00', '实验四', 1);
-INSERT INTO `stu_experiment_discuss` VALUES (12, '2015012000', '我就不告诉你', '2019-05-27 20:25:48', '实验五', 1);
-INSERT INTO `stu_experiment_discuss` VALUES (13, '2015012947', '呵呵', '2019-05-27 20:45:18', '实验四', 1);
-INSERT INTO `stu_experiment_discuss` VALUES (14, '2015012947', '喵喵喵', '2019-05-27 20:45:44', '实验四', 0);
-INSERT INTO `stu_experiment_discuss` VALUES (15, '2015012000', '哈哈', '2019-05-28 14:50:19', '实验一', 1);
-INSERT INTO `stu_experiment_discuss` VALUES (16, '2015012947', 'zuoyeshenmshihou', '2019-05-29 10:02:10', '实验一', 0);
+INSERT INTO `stu_experiment_discuss` VALUES (18, '2015012951', '程序设计思路：由于字符对应的十进制ASCII码的区间是0-127，至多有三位，所以将输入字符的ASCII码分成三位，然后依次输出。', '2019-06-09 09:19:29', '实验一', 0);
+INSERT INTO `stu_experiment_discuss` VALUES (19, '2015012000', '数据总线DB用于在部件之间传送数据（指令）信息，要连接到存储器和串行口的数据线引脚（双向）；运算器的数据输入引脚D和输出引脚Y', '2019-06-08 16:36:19', '实验一', 1);
+INSERT INTO `stu_experiment_discuss` VALUES (28, '2015012000', '今天大家把实验四做完', '2019-06-09 09:21:00', '实验四', 1);
 
 -- ----------------------------
 -- Table structure for stu_experiment_kq
@@ -213,11 +201,18 @@ CREATE TABLE `stu_experiment_kq`  (
 -- ----------------------------
 -- Records of stu_experiment_kq
 -- ----------------------------
-INSERT INTO `stu_experiment_kq` VALUES ('2015012947', 0, 0, 2, -1, 2, 3, 98);
-INSERT INTO `stu_experiment_kq` VALUES ('2015012948', 0, 0, 0, 3, 0, 3, 88);
-INSERT INTO `stu_experiment_kq` VALUES ('2015012951', 0, 0, 0, 3, 0, 3, 88);
-INSERT INTO `stu_experiment_kq` VALUES ('2015012975', 0, 0, 1, 2, 0, 3, 89);
-INSERT INTO `stu_experiment_kq` VALUES ('2015012988', 0, 0, 1, 2, 0, 3, 85);
+INSERT INTO `stu_experiment_kq` VALUES ('2015012947', 0, 0, 1, 3, 1, 5, 85);
+INSERT INTO `stu_experiment_kq` VALUES ('2015012948', 0, 0, 0, 5, 0, 5, 80);
+INSERT INTO `stu_experiment_kq` VALUES ('2015012951', 0, 0, 0, 4, 1, 5, 84);
+INSERT INTO `stu_experiment_kq` VALUES ('2015012957', 0, 0, 0, 4, 0, 4, 84);
+INSERT INTO `stu_experiment_kq` VALUES ('2015012958', 0, 0, 0, 4, 0, 4, 84);
+INSERT INTO `stu_experiment_kq` VALUES ('2015012959', 0, 0, 0, 4, 0, 4, 84);
+INSERT INTO `stu_experiment_kq` VALUES ('2015012960', 0, 0, 0, 4, 0, 4, 84);
+INSERT INTO `stu_experiment_kq` VALUES ('2015012961', 0, 0, 0, 4, 0, 4, 84);
+INSERT INTO `stu_experiment_kq` VALUES ('2015012975', 0, 0, 0, 4, 0, 4, 84);
+INSERT INTO `stu_experiment_kq` VALUES ('2015012977', 0, 0, 0, 4, 0, 4, 84);
+INSERT INTO `stu_experiment_kq` VALUES ('2015012988', 0, 0, 0, 4, 0, 4, 84);
+INSERT INTO `stu_experiment_kq` VALUES ('20150129999', 0, 0, 0, 4, 0, 4, 84);
 
 -- ----------------------------
 -- Table structure for stu_experiment_score
@@ -242,8 +237,15 @@ CREATE TABLE `stu_experiment_score`  (
 INSERT INTO `stu_experiment_score` VALUES ('2015012947', 100, 100, 99, 79, 0, 378, 94.5);
 INSERT INTO `stu_experiment_score` VALUES ('2015012948', 35, 0, 0, 100, 0, 135, 33.75);
 INSERT INTO `stu_experiment_score` VALUES ('2015012951', 88, 0, 0, 100, 0, 188, 47);
+INSERT INTO `stu_experiment_score` VALUES ('2015012957', 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `stu_experiment_score` VALUES ('2015012958', 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `stu_experiment_score` VALUES ('2015012959', 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `stu_experiment_score` VALUES ('2015012960', 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `stu_experiment_score` VALUES ('2015012961', 0, 0, 0, 0, 0, 0, 0);
 INSERT INTO `stu_experiment_score` VALUES ('2015012975', 99, 100, 88, 79, 0, 366, 91.5);
+INSERT INTO `stu_experiment_score` VALUES ('2015012977', 52, 0, 0, 100, 0, 152, 38);
 INSERT INTO `stu_experiment_score` VALUES ('2015012988', 100, 80, 77, 81, 0, 338, 84.5);
+INSERT INTO `stu_experiment_score` VALUES ('20150129999', 100, 0, 100, 100, 0, 300, 75);
 
 -- ----------------------------
 -- Table structure for stu_kq
@@ -261,20 +263,12 @@ CREATE TABLE `stu_kq`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `kq_sno`(`sno`) USING BTREE,
   CONSTRAINT `kq_sno` FOREIGN KEY (`sno`) REFERENCES `stu` (`sno`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 278 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 297 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of stu_kq
 -- ----------------------------
-INSERT INTO `stu_kq` VALUES (265, '2015012947', '2019-05-20', '星期一', '16:40:00', '18:34:30', 0, 0);
 INSERT INTO `stu_kq` VALUES (269, '2015012947', '2019-05-23', '星期二', '16:00:02', '17:51:04', 1, 1);
-INSERT INTO `stu_kq` VALUES (270, '2015012948', '2019-05-22', '星期三', '14:05:00', '15:07:00', 1, 1);
-INSERT INTO `stu_kq` VALUES (271, '2015012975', '2019-05-22', '星期三', '21:05:35', '21:05:42', 1, 1);
-INSERT INTO `stu_kq` VALUES (272, '2015012948', '2019-05-25', '星期四', '10:50:19', '12:00:23', 1, 0);
-INSERT INTO `stu_kq` VALUES (273, '2015012951', '2019-05-23', '星期四', '17:03:42', '17:04:43', 1, 1);
-INSERT INTO `stu_kq` VALUES (275, '2015012947', '2019-05-25', '星期六', '10:05:59', '12:00:09', 0, 0);
-INSERT INTO `stu_kq` VALUES (276, '2015012988', '2019-05-25', '星期六', '20:17:13', '20:17:13', 1, 1);
-INSERT INTO `stu_kq` VALUES (277, '2015012947', '2019-05-27', '星期一', '20:26:25', '20:26:25', 1, 1);
 
 -- ----------------------------
 -- Table structure for stu_score_table
@@ -292,11 +286,18 @@ CREATE TABLE `stu_score_table`  (
 -- ----------------------------
 -- Records of stu_score_table
 -- ----------------------------
-INSERT INTO `stu_score_table` VALUES ('2015012947', 98, 94.5, 95.55);
-INSERT INTO `stu_score_table` VALUES ('2015012948', 88, 33.75, 50.025);
-INSERT INTO `stu_score_table` VALUES ('2015012951', 88, 47, 59.3);
-INSERT INTO `stu_score_table` VALUES ('2015012975', 89, 91.5, 90.75);
-INSERT INTO `stu_score_table` VALUES ('2015012988', 85, 84.5, 84.65);
+INSERT INTO `stu_score_table` VALUES ('2015012947', 85, 94.5, 91.65);
+INSERT INTO `stu_score_table` VALUES ('2015012948', 80, 33.75, 47.625);
+INSERT INTO `stu_score_table` VALUES ('2015012951', 84, 47, 58.1);
+INSERT INTO `stu_score_table` VALUES ('2015012957', 84, 0, 25.2);
+INSERT INTO `stu_score_table` VALUES ('2015012958', 84, 0, 25.2);
+INSERT INTO `stu_score_table` VALUES ('2015012959', 84, 0, 25.2);
+INSERT INTO `stu_score_table` VALUES ('2015012960', 84, 0, 25.2);
+INSERT INTO `stu_score_table` VALUES ('2015012961', 84, 0, 25.2);
+INSERT INTO `stu_score_table` VALUES ('2015012975', 84, 91.5, 89.25);
+INSERT INTO `stu_score_table` VALUES ('2015012977', 84, 38, 51.8);
+INSERT INTO `stu_score_table` VALUES ('2015012988', 84, 84.5, 84.35);
+INSERT INTO `stu_score_table` VALUES ('20150129999', 84, 75, 77.7);
 
 -- ----------------------------
 -- Table structure for stu_sumbit_file
@@ -308,6 +309,7 @@ CREATE TABLE `stu_sumbit_file`  (
   `filename` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `submit_path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `submit_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0),
+  `size` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`sno`, `name`) USING BTREE,
   INDEX `s_s_f_name`(`name`) USING BTREE,
   CONSTRAINT `s_s_f_name` FOREIGN KEY (`name`) REFERENCES `teacher_experiment` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -317,7 +319,12 @@ CREATE TABLE `stu_sumbit_file`  (
 -- ----------------------------
 -- Records of stu_sumbit_file
 -- ----------------------------
-INSERT INTO `stu_sumbit_file` VALUES ('2015012947', '实验一', '2015012947_李娟_实验一', './sumbit/2015012000/软工153班', '2019-05-29 13:43:58');
+INSERT INTO `stu_sumbit_file` VALUES ('2015012947', '实验一', '2015012947_李娟_实验一.docx', './submit/2015012000/信息152班', '2019-06-06 22:58:39', '2.30Mb');
+INSERT INTO `stu_sumbit_file` VALUES ('2015012947', '实验三', '2015012947_李娟_实验三.doc', './submit/2015012000/信息152班', '2019-06-08 19:10:07', '8.66kb');
+INSERT INTO `stu_sumbit_file` VALUES ('2015012947', '实验二', '2015012947_李娟_实验二.docx', './submit/2015012000/信息152班', '2019-06-06 22:58:43', '688.21kb');
+INSERT INTO `stu_sumbit_file` VALUES ('2015012947', '实验四', '2015012947_李娟_实验四.doc', './submit/2015012000/信息152班', '2019-06-08 19:16:55', '8.66kb');
+INSERT INTO `stu_sumbit_file` VALUES ('2015012948', '实验二', '2015012948_王伟_实验二.docx', './submit/2015012000/软工151班', '2019-06-06 23:00:34', '862.20kb');
+INSERT INTO `stu_sumbit_file` VALUES ('2015012975', '实验二', '2015012975_石会雯_实验二.pdf', './submit/2015012000/软工151班', '2019-06-06 23:02:58', '222.45kb');
 
 -- ----------------------------
 -- Table structure for teacher
@@ -331,7 +338,9 @@ CREATE TABLE `teacher`  (
   `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `phone` char(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `address` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `status` int(255) NULL DEFAULT 0,
+  `status` int(255) NULL DEFAULT 0 COMMENT '1表示允许学生查看，0表示不允许学生查看',
+  `status2` int(255) NULL DEFAULT 1 COMMENT '1表示有最晚时间，0表示没有最晚时间',
+  `status3` int(255) NULL DEFAULT 0 COMMENT '1表示允许学生查看，0表示不允许学生查看',
   PRIMARY KEY (`tno`) USING BTREE,
   UNIQUE INDEX `tno`(`tno`) USING BTREE,
   CONSTRAINT `tnos` FOREIGN KEY (`tno`) REFERENCES `user` (`uname`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -340,8 +349,8 @@ CREATE TABLE `teacher`  (
 -- ----------------------------
 -- Records of teacher
 -- ----------------------------
-INSERT INTO `teacher` VALUES ('2015012000', '田晶', NULL, '男', '546340932@qq.com', '18821620434', '学院楼3楼', 0);
-INSERT INTO `teacher` VALUES ('20150128888', '贺换', NULL, '女', '4@qq.com', '13474229060', '学院楼5楼', 0);
+INSERT INTO `teacher` VALUES ('2015012000', '田晶', NULL, '男', '546340932@qq.com', '18821620434', '学院楼3楼401', 1, 1, 1);
+INSERT INTO `teacher` VALUES ('20150128888', '贺换', NULL, '女', '4@qq.com', '13474229060', '学院楼5楼', 0, 1, 0);
 
 -- ----------------------------
 -- Table structure for teacher_experiment
@@ -350,6 +359,7 @@ DROP TABLE IF EXISTS `teacher_experiment`;
 CREATE TABLE `teacher_experiment`  (
   `tno` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `indexs` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`tno`, `name`) USING BTREE,
   INDEX `name`(`name`) USING BTREE,
   CONSTRAINT `tno_ex` FOREIGN KEY (`tno`) REFERENCES `teacher` (`tno`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -358,42 +368,11 @@ CREATE TABLE `teacher_experiment`  (
 -- ----------------------------
 -- Records of teacher_experiment
 -- ----------------------------
-INSERT INTO `teacher_experiment` VALUES ('2015012000', '实验一');
-INSERT INTO `teacher_experiment` VALUES ('2015012000', '实验三');
-INSERT INTO `teacher_experiment` VALUES ('2015012000', '实验二');
-INSERT INTO `teacher_experiment` VALUES ('2015012000', '实验五');
-INSERT INTO `teacher_experiment` VALUES ('2015012000', '实验四');
-
--- ----------------------------
--- Table structure for teacher_summary
--- ----------------------------
-DROP TABLE IF EXISTS `teacher_summary`;
-CREATE TABLE `teacher_summary`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `tno` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '相当于主题',
-  `t_summary` blob NULL,
-  `time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0),
-  `type` tinyint(1) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for teacher_upload_file
--- ----------------------------
-DROP TABLE IF EXISTS `teacher_upload_file`;
-CREATE TABLE `teacher_upload_file`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `tno` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `name` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `upload_path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `upload_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0),
-  `type` tinyint(2) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `t_u_f_name`(`name`) USING BTREE,
-  INDEX `t_u_f_tno`(`tno`) USING BTREE,
-  CONSTRAINT `t_u_f_tno` FOREIGN KEY (`tno`) REFERENCES `teacher` (`tno`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+INSERT INTO `teacher_experiment` VALUES ('2015012000', '实验一', 1);
+INSERT INTO `teacher_experiment` VALUES ('2015012000', '实验三', 3);
+INSERT INTO `teacher_experiment` VALUES ('2015012000', '实验二', 2);
+INSERT INTO `teacher_experiment` VALUES ('2015012000', '实验五', 5);
+INSERT INTO `teacher_experiment` VALUES ('2015012000', '实验四', 4);
 
 -- ----------------------------
 -- Table structure for user
@@ -410,14 +389,22 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('2015012000', '123456', '教师');
+INSERT INTO `user` VALUES ('2015012000', '123321', '教师');
 INSERT INTO `user` VALUES ('20150128888', '123456', '教师');
 INSERT INTO `user` VALUES ('2015012901', '123456', '管理员');
 INSERT INTO `user` VALUES ('2015012947', '123456', '学生');
+INSERT INTO `user` VALUES ('20150129471', '123456', '学生');
 INSERT INTO `user` VALUES ('2015012948', '123456', '学生');
 INSERT INTO `user` VALUES ('2015012951', '123456', '学生');
+INSERT INTO `user` VALUES ('2015012957', '123456', '学生');
+INSERT INTO `user` VALUES ('2015012958', '123456', '学生');
+INSERT INTO `user` VALUES ('2015012959', '123456', '学生');
+INSERT INTO `user` VALUES ('2015012960', '123456', '学生');
+INSERT INTO `user` VALUES ('2015012961', '123456', '学生');
 INSERT INTO `user` VALUES ('2015012975', '123456', '学生');
+INSERT INTO `user` VALUES ('2015012977', '123456', '学生');
 INSERT INTO `user` VALUES ('2015012988', '123456', '学生');
+INSERT INTO `user` VALUES ('20150129999', '123456', '学生');
 
 -- ----------------------------
 -- View structure for final_score
@@ -436,6 +423,18 @@ CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `s_t` AS select `stu`.`sn
 -- ----------------------------
 DROP VIEW IF EXISTS `stu_discuss`;
 CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `stu_discuss` AS select `a`.`sname` AS `sname`,`a`.`cname` AS `cname`,`a`.`sno` AS `sno`,`b`.`content` AS `content`,`b`.`time` AS `time`,`b`.`name` AS `name` from (`stu_experiment_discuss` `b` join `stu` `a`) where (`a`.`sno` = `b`.`uid`) order by `b`.`time` desc;
+
+-- ----------------------------
+-- View structure for stu_submit_record
+-- ----------------------------
+DROP VIEW IF EXISTS `stu_submit_record`;
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `stu_submit_record` AS select `a`.`sno` AS `sno`,`a`.`sname` AS `sname`,`a`.`cname` AS `cname`,`b`.`filename` AS `filename`,`b`.`name` AS `name`,`b`.`size` AS `size`,`b`.`submit_time` AS `submit_time`,`c`.`tno` AS `tno` from ((`stu_sumbit_file` `b` join `stu` `a`) join `class` `c`) where ((`a`.`sno` = `b`.`sno`) and (`a`.`cname` = `c`.`cname`));
+
+-- ----------------------------
+-- View structure for stu_sumbit_record
+-- ----------------------------
+DROP VIEW IF EXISTS `stu_sumbit_record`;
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `stu_sumbit_record` AS select `a`.`sno` AS `sno`,`a`.`sname` AS `sname`,`a`.`cname` AS `cname`,`b`.`filename` AS `filename`,`b`.`name` AS `name`,`b`.`size` AS `size`,`b`.`submit_time` AS `submit_time`,`c`.`tno` AS `tno` from ((`stu_sumbit_file` `b` join `stu` `a`) join `class` `c`) where ((`a`.`sno` = `b`.`sno`) and (`a`.`cname` = `c`.`cname`));
 
 -- ----------------------------
 -- View structure for teacher_discuss
@@ -473,10 +472,7 @@ DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
 	open v_sno;
 	REPEAT
 		fetch v_sno into num;
--- 			select kq_score into v_score from total_score where sno=num;
--- 			select avg_score into vv_score from total_score where sno=num;
--- 			select kq_rate into v_kq_rate from kq_system where tno=v_tno;
-			if NOT DONE  then
+			if NOT done  then
 			select kq_score into v_score from stu_experiment_kq where sno=num;
 			select avg_score into vv_score from stu_experiment_score where sno=num;
 			select kq_rate into v_kq_rate from kq_system where tno=v_tno;
@@ -551,23 +547,61 @@ BEGIN
 	#Routine body goes here...
 	DECLARE v_total int;
 	DECLARE class VARCHAR(40) DEFAULT '';
-	DECLARE IS_FOUND INTEGER DEFAULT 1;
+	DECLARE done INT DEFAULT 0; #repeat结束标识
 	DECLARE late,early,late_early,absence int;
 	DECLARE v_cname CURSOR
 	FOR
 	select cname from class where tno=v_tno;
-	DECLARE CONTINUE HANDLER FOR NOT FOUND SET IS_FOUND=0;
+	
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
 	open v_cname;
 	REPEAT
 		fetch v_cname into class;
-		if IS_FOUND=0 then
+		if not done then
 			SELECT count(*) INTO v_total 
 			FROM  coursetable
 			WHERE  cname=class and (cdate<CURDATE() or (cdate=curdate() && stime-CURTIME()<500));
+
 			SELECT late_score, early_score,late_early_score,absence_score into late,early,late_early,absence from kq_system where tno=v_tno;
 			update stu_experiment_kq set absence_num=v_total-total_num+absence_num, total_num=v_total,kq_score=100-(late*late_num+early_num*early+late_early_num*late_early+absence_num*absence) where sno in (SELECT sno from stu where cname=class) and total_num<v_total;
+			select v_total;
 		end if;
- 	UNTIL IS_FOUND!=0 END REPEAT;
+ 	UNTIL done END REPEAT;
+	close v_cname;
+END
+;;
+delimiter ;
+
+-- ----------------------------
+-- Procedure structure for kq_update
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `kq_update`;
+delimiter ;;
+CREATE PROCEDURE `kq_update`(IN v_tno VARCHAR(15))
+  READS SQL DATA 
+BEGIN
+	#Routine body goes here...
+	DECLARE v_total int;
+	DECLARE class VARCHAR(40) DEFAULT '';
+	DECLARE done INT DEFAULT 0; #repeat结束标识
+	DECLARE late,early,late_early,absence int;
+	DECLARE v_cname CURSOR
+	FOR
+	select cname from class where tno=v_tno;
+
+	open v_cname;
+	REPEAT
+		fetch v_cname into class;
+		if not DONE then
+			SELECT count(*) INTO v_total 
+			FROM  coursetable
+			WHERE  cname=class and (cdate<CURDATE() or (cdate=curdate() && stime-CURTIME()<500));
+
+			SELECT late_score, early_score,late_early_score,absence_score into late,early,late_early,absence from kq_system where tno=v_tno;
+			update stu_experiment_kq set absence_num=v_total-total_num+absence_num, total_num=v_total,kq_score=100-(late*late_num+early_num*early+late_early_num*late_early+absence_num*absence) where sno in (SELECT sno from stu where cname=class) and total_num<v_total;
+			select v_total;
+		end if;
+ 	UNTIL done END REPEAT;
 	close v_cname;
 END
 ;;
@@ -604,7 +638,7 @@ BEGIN
 -- 	迟到早退次数
 	SELECT  COUNT(*)  INTO  late_early_num
 	FROM  stu_kq  
-	WHERE  sno=v_sno and etype=1 and etype=1;
+	WHERE  sno=v_sno and etype=1 and stype=1;
 -- 	正常次数
 	SELECT  COUNT(*)  INTO  normal_num
 	FROM  stu_kq  

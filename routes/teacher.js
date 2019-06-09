@@ -132,12 +132,12 @@ router.post('/allFile', function (req, res) {
           let sizeMb=0;
           let sizeGb=0;
           if(sizeKb >= 1024){
-            sizeMB = sizeKb / 1024
+            sizeMb = sizeKb / 1024
             if(sizeMb >= 1024){
               sizeGb = sizeMb / 1024
             }
           }
-          obj.size = sizeGb>0 ? sizeGb.toFixed(1) + 'Gb' :(sizeMb > 0 ? sizeMb.toFixed(1)  + 'Mb':sizeKb.toFixed(1)  + 'kb')  ;//文件大小，以字节为单位
+          obj.size = sizeGb>0 ? sizeGb.toFixed(2) + 'Gb' :(sizeMb > 0 ? sizeMb.toFixed(2)  + 'Mb':sizeKb.toFixed(2)  + 'kb')  ;//文件大小，以字节为单位
           obj.time=format(new Date(states.mtime))
           obj.name = file;//文件名
           obj.path = path+'/'+file; //文件绝对路径
@@ -202,6 +202,27 @@ router.post('/delDir', function (req, res) {
   delDir(path)
   db.json(res, { type: 1, msg: "删除成功", data: results })
 })
+router.post('/clearDir', function (req, res) {
+  let results=[]
+  let path = req.body.url
+  clearDir(path)
+  db.json(res, { type: 1, msg: "删除成功", data: results })
+})
+function clearDir(path){
+  let files = [];
+  if(fs.existsSync(path)){
+      files = fs.readdirSync(path);
+      files.forEach((file, index) => {
+          let curPath = path + "/" + file;
+          if(fs.statSync(curPath).isDirectory()){
+              delDir(curPath); //递归删除文件夹
+          } else {
+              fs.unlinkSync(curPath); //删除文件
+          }
+      });
+      // fs.rmdirSync(path);
+  }
+}
 function delDir(path){
   let files = [];
   if(fs.existsSync(path)){
@@ -244,10 +265,34 @@ router.post('/discuss', function (req, res) {
 router.post('/addSys', function (req, res) {
   db.query(sql.experiment_submit_time.add, [req.body.tno,req.body.name,req.body.cname,req.body.last_date]).then(function ([err, results]) {
     if (err) {
-      db.json(res, { type: 0, msg: "添加失败" })
+      db.json(res, { type: 0, msg: "已存在，添加失败" })
     }
     else {
         db.json(res, { type: 1, msg: "添加成功", data: results })
+    }
+  }).catch(function (err) {
+      throw err
+  })
+})
+router.post('/updateSys', function (req, res) {
+  db.query(sql.experiment_submit_time.update, [req.body.last_date,req.body.name,req.body.cname]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "更新失败" })
+    }
+    else {
+        db.json(res, { type: 1, msg: "更新成功", data: results })
+    }
+  }).catch(function (err) {
+      throw err
+  })
+})
+router.post('/deleteSys', function (req, res) {
+  db.query(sql.experiment_submit_time.delete, [req.body.name,req.body.cname]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "删除失败" })
+    }
+    else {
+        db.json(res, { type: 1, msg: "删除成功", data: results })
     }
   }).catch(function (err) {
       throw err
@@ -257,7 +302,8 @@ router.post('/total_kqt', function (req, res) {
   
   db.query(sql.kq_final_update, [req.body.tno]).then(function ([err, results]) {
     if (err) {
-        db.json(res, { type: 0, msg: "查询考勤失败" })
+      console.log(err)
+      db.json(res, { type: 0, msg: "查询考勤失败1" })
     }
     else {
       db.query(sql.stu_experiment_kq.kq_sj, [req.body.tno]).then(function ([err, results]) {
@@ -274,6 +320,27 @@ router.post('/total_kqt', function (req, res) {
       throw err
   })
 })
+router.post('/total_kq', function (req, res) {
+  db.query(sql.stu_experiment_kq.kq_sj, [req.body.tno]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "查询考勤失败" })
+    }
+    else {
+      db.json(res, { type: 1, msg: "查询考勤列表成功", data: results })
+    }
+  })
+})
+router.post('/one_exp', function (req, res) {
+  db.query(sql.stu_sumbit_file.all, [req.body.name]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "查询实验提交记录失败" })
+    }
+    else {
+      db.json(res, { type: 1, msg: "查询实验提交记录成功", data: results })
+    }
+  })
+})
+
 router.post('/ka_jl_query', function (req, res) {
   db.query(sql.stu_kq.kq_jl_query, [req.body.tno, req.body.cname, req.body.date]).then(function ([err, results]) {
     if (err) {
@@ -303,6 +370,7 @@ router.post('/sj_kq', function (req, res) {
 
   db.query(sql.kq, [params.tno]).then(function ([err, results]) {
     if (err) {
+      console.log(err)
       db.json(res, { type: 0, msg: "更新签到出错!" })
     }
     else {
@@ -323,7 +391,7 @@ router.post('/add_exp', function (req, res) {
     }
     else {
       if(results[0].num === 0){
-        db.query(sql.teacher_experiment.add, [params.tno, params.name]).then(function ([err, results]) {
+        db.query(sql.teacher_experiment.add, [params.tno, params.name, params.index]).then(function ([err, results]) {
           if(err){
             db.json(res, { type: 0, msg: "添加失败!" })
           }

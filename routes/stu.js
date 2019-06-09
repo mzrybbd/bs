@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var db = require('../db/config');
 var sql = require("../db/sql");
+const fs = require('fs');
 
 router.post('/all', function (req, res) {
   db.query(sql.stu.all, []).then(function ([err, results]) {
@@ -143,7 +144,7 @@ router.post('/submitRecord', function (req, res) {
     }
     else {
       if(results.length === 0){
-        db.query(sql.stu_sumbit_file.insert, [params.sno,params.name,params.filename,params.path]).then(function ([err, results]) {
+        db.query(sql.stu_sumbit_file.insert, [params.sno,params.name,params.filename,params.path,params.size]).then(function ([err, results]) {
           if(err){
             db.json(res, { type: 0, msg: "添加失败" })
           }else{
@@ -151,7 +152,10 @@ router.post('/submitRecord', function (req, res) {
           }
         })
       }else{
-        db.query(sql.stu_sumbit_file.update, [params.path, params.filename, params.sno,params.name]).then(function ([err, results]) {
+        // let path = results[0].submit_path+'/'+results[0].filename
+        console.log(params.filename)
+
+        db.query(sql.stu_sumbit_file.update, [params.path, params.filename, params.size, params.sno,params.name]).then(function ([err, results]) {
           if(err){
             db.json(res, { type: 0, msg: "更新失败" })
           }else{
@@ -168,7 +172,9 @@ router.post('/checkSubmit', function (req, res) {
   var params = req.body
 
   db.query(sql.stu_sumbit_file.check, [params.sno,params.name]).then(function ([err, results]) {
+    console.log(params.sno,params.name)
     if (err) {
+      console.log(err)
       db.json(res, { type: 0, msg: "查询失败!" })
     }
     else {
@@ -237,6 +243,34 @@ router.post('/updateQd2', function (req, res) {
     }
     else {
       db.json(res, { type: 1, msg: "更新成功", data: results[0] })
+    }
+  }).catch(function (err) {
+    throw err
+  })
+})
+router.post('/expSearch', function (req, res) {
+  var params = req.body
+
+  db.query(sql.experiment_submit_time.search, [params.sno]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "查询实验失败!" })
+    }
+    else {
+      db.json(res, { type: 1, msg: "查询实验成功", data: results })
+    }
+  }).catch(function (err) {
+    throw err
+  })
+})
+router.post('/expRecord', function (req, res) {
+  var params = req.body
+
+  db.query(sql.stu_sumbit_file.query, [params.sno]).then(function ([err, results]) {
+    if (err) {
+      db.json(res, { type: 0, msg: "查询实验失败!" })
+    }
+    else {
+      db.json(res, { type: 1, msg: "查询实验成功", data: results })
     }
   }).catch(function (err) {
     throw err
